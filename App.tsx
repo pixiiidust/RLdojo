@@ -27,10 +27,10 @@ const formatDuration = (start?: string, end?: string) => {
 const RetroContainer: React.FC<{ className?: string; children: React.ReactNode; }> = ({ className = "", children }) => (
     <div className={`retro-border bg-black/80 relative flex flex-col overflow-hidden ${className}`}>
         {children}
-        <div className="absolute top-0 left-0 w-3 h-3 md:w-4 md:h-4 bg-amber-500"></div>
-        <div className="absolute top-0 right-0 w-3 h-3 md:w-4 md:h-4 bg-amber-500"></div>
-        <div className="absolute bottom-0 left-0 w-3 h-3 md:w-4 md:h-4 bg-amber-500"></div>
-        <div className="absolute bottom-0 right-0 w-3 h-3 md:w-4 md:h-4 bg-amber-500"></div>
+        <div className="absolute top-0 left-0 w-2 h-2 md:w-4 md:h-4 bg-amber-500"></div>
+        <div className="absolute top-0 right-0 w-2 h-2 md:w-4 md:h-4 bg-amber-500"></div>
+        <div className="absolute bottom-0 left-0 w-2 h-2 md:w-4 md:h-4 bg-amber-500"></div>
+        <div className="absolute bottom-0 right-0 w-2 h-2 md:w-4 md:h-4 bg-amber-500"></div>
     </div>
 );
 
@@ -65,17 +65,17 @@ const Wizard: React.FC<WizardProps> = ({ onComplete, onCancel }) => {
     ];
 
     return (
-        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-            <RetroContainer className="w-full max-w-4xl p-0 shadow-[0_0_100px_rgba(255,176,0,0.15)] h-[550px] md:h-[600px]">
+        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-0 md:p-4 backdrop-blur-sm">
+            <RetroContainer className="w-full max-w-4xl p-0 shadow-[0_0_100px_rgba(255,176,0,0.15)] h-full md:h-[600px] border-none md:border-2">
                 {/* Header */}
-                <div className="bg-amber-500 text-black p-3 md:p-6 flex justify-between items-center">
-                    <h2 className="text-lg md:text-3xl font-black uppercase flex items-center gap-2 md:gap-3"><Zap size={24} className="md:w-8 md:h-8"/> NEW SESSION</h2>
-                    <button onClick={onCancel}><X size={24} className="md:w-8 md:h-8"/></button>
+                <div className="bg-amber-500 text-black p-3 md:p-6 flex justify-between items-center shrink-0">
+                    <h2 className="text-lg md:text-3xl font-black uppercase flex items-center gap-2 md:gap-3"><Zap size={20} className="md:w-8 md:h-8"/> NEW SESSION</h2>
+                    <button onClick={onCancel}><X size={20} className="md:w-8 md:h-8"/></button>
                 </div>
 
-                <div className="flex flex-1 overflow-hidden">
+                <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
                     {/* Steps Sidebar - Hidden on mobile */}
-                    <div className="hidden md:block w-64 border-r-4 border-amber-500/30 bg-amber-950/20 p-6 space-y-6">
+                    <div className="hidden md:block w-64 border-r-4 border-amber-500/30 bg-amber-950/20 p-6 space-y-6 shrink-0">
                         {steps.map(s => (
                             <div key={s.id} className={`flex items-center gap-4 ${step === s.id ? 'text-amber-500 opacity-100' : 'text-amber-900 opacity-50'}`}>
                                 <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold ${step === s.id ? 'border-amber-500 bg-amber-500 text-black' : 'border-amber-900'}`}>
@@ -99,12 +99,12 @@ const Wizard: React.FC<WizardProps> = ({ onComplete, onCancel }) => {
                             {step === 1 && (
                                 <div className="space-y-4 md:space-y-8 animate-in fade-in slide-in-from-right-8">
                                     <h3 className="text-xl md:text-4xl font-black uppercase">First, give your fighter a name.</h3>
-                                    <p className="text-base md:text-xl opacity-70">This helps you identify it later in the logs.</p>
+                                    <p className="text-sm md:text-xl opacity-70">This helps you identify it later in the logs.</p>
                                     <input 
                                         autoFocus
                                         value={name}
                                         onChange={e => setName(e.target.value)}
-                                        className="w-full bg-black border-b-2 md:border-b-4 border-amber-500 py-2 md:py-4 text-xl md:text-4xl text-amber-500 focus:outline-none placeholder-amber-900 uppercase font-mono"
+                                        className="w-full bg-black border-b-2 md:border-b-4 border-amber-500 py-2 md:py-4 text-xl md:text-4xl text-amber-500 focus:outline-none placeholder-amber-900 uppercase font-mono rounded-none"
                                         placeholder="E.G. ROOKIE BOT 01"
                                     />
                                 </div>
@@ -135,7 +135,7 @@ const Wizard: React.FC<WizardProps> = ({ onComplete, onCancel }) => {
                             {step === 3 && (
                                 <div className="space-y-4 md:space-y-8 animate-in fade-in slide-in-from-right-8">
                                     <h3 className="text-xl md:text-4xl font-black uppercase">Ready to Initialize?</h3>
-                                    <div className="border-2 md:border-4 border-amber-900/50 p-4 md:p-6 bg-amber-950/10 space-y-4 text-base md:text-xl">
+                                    <div className="border-2 md:border-4 border-amber-900/50 p-4 md:p-6 bg-amber-950/10 space-y-4 text-sm md:text-xl">
                                         <div className="flex justify-between border-b border-amber-900 pb-2">
                                             <span className="opacity-50">FIGHTER ID</span>
                                             <span className="font-bold">{name || "UNNAMED"}</span>
@@ -153,7 +153,7 @@ const Wizard: React.FC<WizardProps> = ({ onComplete, onCancel }) => {
                         </div>
 
                         {/* Footer Nav */}
-                        <div className="flex justify-between pt-4 md:pt-8 border-t border-amber-900/30">
+                        <div className="flex justify-between pt-4 md:pt-8 border-t border-amber-900/30 shrink-0">
                             {step > 1 ? (
                                 <button onClick={() => setStep(s => s - 1)} className="text-base md:text-xl uppercase font-bold text-amber-700 hover:text-amber-500">Back</button>
                             ) : <div></div>}
@@ -178,13 +178,13 @@ const Wizard: React.FC<WizardProps> = ({ onComplete, onCancel }) => {
 
 // --- Welcome Screen ---
 const WelcomeScreen: React.FC<{ onStartBeginner: () => void, onStartAdvanced: () => void }> = ({ onStartBeginner, onStartAdvanced }) => (
-    <div className="fixed inset-0 bg-black z-40 flex flex-col items-center justify-center text-center p-4 md:p-8 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-900/20 via-black to-black">
-        <div className="max-w-5xl space-y-6 md:space-y-12 animate-in zoom-in duration-500 border-2 md:border-4 border-amber-500 p-6 md:p-12 bg-black/80 shadow-[0_0_150px_rgba(255,176,0,0.1)]">
+    <div className="fixed inset-0 bg-black z-40 flex flex-col items-center justify-center text-center p-4 md:p-8 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-900/20 via-black to-black overflow-y-auto">
+        <div className="max-w-5xl space-y-6 md:space-y-12 animate-in zoom-in duration-500 border-2 md:border-4 border-amber-500 p-6 md:p-12 bg-black/80 shadow-[0_0_150px_rgba(255,176,0,0.1)] my-auto">
             <h1 className="text-5xl md:text-8xl leading-none font-black text-amber-500 text-shadow-amber uppercase tracking-tighter mb-4">
                 RL DOJO
             </h1>
             
-            <p className="text-base md:text-2xl text-amber-100 font-medium leading-relaxed max-w-4xl mx-auto opacity-90">
+            <p className="text-sm md:text-2xl text-amber-100 font-medium leading-relaxed max-w-4xl mx-auto opacity-90">
                 Reinforcement learning sounds complex, but it is easier to grasp when you see it happen. <br/><br/>
                 <span className="text-amber-500">RL Dojo</span> lets you train a small agent in a simple world and watch it improve through trial and error. 
                 You see how rewards guide behavior and how a policy takes shape, step by step.
@@ -198,7 +198,7 @@ const WelcomeScreen: React.FC<{ onStartBeginner: () => void, onStartAdvanced: ()
                 >
                     <div className="absolute top-0 left-0 w-full h-1 bg-amber-500 group-hover:bg-black"></div>
                     <div className="flex items-center gap-3 text-xl md:text-3xl font-black uppercase text-amber-500 group-hover:text-black">
-                        <BookOpen size={28} className="md:w-10 md:h-10"/> Start Journey
+                        <BookOpen size={24} className="md:w-10 md:h-10"/> Start Journey
                     </div>
                     <p className="text-sm md:text-lg text-amber-500/70 group-hover:text-black/80 font-bold">
                         I am new to RL. Guide me through training my first agent.
@@ -211,7 +211,7 @@ const WelcomeScreen: React.FC<{ onStartBeginner: () => void, onStartAdvanced: ()
                     className="group border-2 md:border-4 border-amber-900 p-4 md:p-8 hover:border-amber-500 hover:bg-amber-900/20 transition-all text-left flex flex-col gap-2 md:gap-4"
                 >
                     <div className="flex items-center gap-3 text-xl md:text-3xl font-black uppercase text-amber-700 group-hover:text-amber-500">
-                        <Command size={28} className="md:w-10 md:h-10"/> Access Console
+                        <Command size={24} className="md:w-10 md:h-10"/> Access Console
                     </div>
                     <p className="text-sm md:text-lg text-amber-900 group-hover:text-amber-500/70 font-bold">
                         I know what I'm doing. Give me raw control over hyperparameters.
@@ -228,26 +228,26 @@ const CompareModal: React.FC<{ runs: Run[], onClose: () => void }> = ({ runs, on
     const completedRuns = runs.filter(r => r.status === RunStatus.COMPLETED);
     
     return (
-        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 md:p-8 backdrop-blur-sm">
-            <RetroContainer className="w-full max-w-5xl p-4 md:p-8 h-[80vh]">
-                 <div className="flex justify-between items-center mb-6 md:mb-8 border-b-4 border-amber-500 pb-4">
-                    <h2 className="text-xl md:text-4xl font-black uppercase flex items-center gap-3">
-                        <BarChart2 size={32} className="md:w-10 md:h-10" /> FIGHTER COMPARISON
+        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-2 md:p-8 backdrop-blur-sm">
+            <RetroContainer className="w-full max-w-5xl p-4 md:p-8 h-full md:h-[80vh]">
+                 <div className="flex justify-between items-center mb-4 md:mb-8 border-b-4 border-amber-500 pb-2 md:pb-4 shrink-0">
+                    <h2 className="text-lg md:text-4xl font-black uppercase flex items-center gap-3">
+                        <BarChart2 size={24} className="md:w-10 md:h-10" /> FIGHTER COMPARISON
                     </h2>
-                    <button onClick={onClose} className="hover:text-white"><X size={32}/></button>
+                    <button onClick={onClose} className="hover:text-white"><X size={24} className="md:w-8 md:h-8"/></button>
                 </div>
                 
                 {completedRuns.length < 2 ? (
                      <div className="flex flex-col items-center justify-center h-full gap-4 opacity-50">
-                        <AlertTriangle size={64}/>
-                        <div className="text-lg md:text-2xl">Need at least 2 completed fighters to compare.</div>
+                        <AlertTriangle size={48} className="md:w-16 md:h-16"/>
+                        <div className="text-sm md:text-2xl text-center">Need at least 2 completed fighters to compare.</div>
                      </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 h-full overflow-y-auto pb-20">
                          {completedRuns.map(run => (
                              <div key={run.run_id} className="border-2 md:border-4 border-amber-900/50 p-4 md:p-6 bg-amber-950/10 flex flex-col gap-2 md:gap-4">
-                                 <div className="text-xl md:text-3xl font-black uppercase text-amber-500">{run.name}</div>
-                                 <div className="grid grid-cols-2 gap-4 text-base md:text-xl">
+                                 <div className="text-lg md:text-3xl font-black uppercase text-amber-500">{run.name}</div>
+                                 <div className="grid grid-cols-2 gap-4 text-sm md:text-xl">
                                      <div>
                                          <span className="block text-xs md:text-sm opacity-50">DIFFICULTY</span>
                                          <span className="font-bold">{run.ui_config?.friendly_difficulty || "CUSTOM"}</span>
@@ -260,7 +260,7 @@ const CompareModal: React.FC<{ runs: Run[], onClose: () => void }> = ({ runs, on
                                  <div className="mt-2 md:mt-4 pt-2 md:pt-4 border-t border-amber-900">
                                      <div className="flex justify-between items-end mb-2">
                                          <span className="font-bold text-sm md:text-base">WIN RATE</span>
-                                         <span className="text-xl md:text-4xl font-black">{Math.round((run.best_mean_reward + 10) / 20 * 100)}%</span>
+                                         <span className="text-lg md:text-4xl font-black">{Math.round((run.best_mean_reward + 10) / 20 * 100)}%</span>
                                      </div>
                                      <div className="w-full bg-amber-900 h-4 md:h-6">
                                          <div className="bg-amber-500 h-full" style={{ width: `${Math.round((run.best_mean_reward + 10) / 20 * 100)}%` }}></div>
@@ -290,7 +290,6 @@ export default function App() {
   const [trainingPreset, setTrainingPreset] = useState<TrainingPreset>(TrainingPreset.STANDARD);
   const [customEpisodes, setCustomEpisodes] = useState<number>(500);
   const [selectedAlgo, setSelectedAlgo] = useState<Algorithm>(Algorithm.DQN);
-  const [showAlgoInfo, setShowAlgoInfo] = useState(false);
   
   // UX State
   const [showWizard, setShowWizard] = useState(false);
@@ -485,8 +484,8 @@ export default function App() {
       
       {/* AI Analysis Modal */}
       {showAnalysisDashboard && selectedRun && (
-          <div className="fixed inset-0 z-50 p-2 md:p-8 bg-black/90 backdrop-blur flex items-center justify-center">
-              <div className="w-full max-w-6xl h-full md:h-[90vh]">
+          <div className="fixed inset-0 z-[100] p-0 md:p-8 bg-black/90 backdrop-blur flex items-center justify-center overflow-hidden">
+              <div className="w-full max-w-6xl h-full md:h-[90vh] flex flex-col relative">
                   {analysisLoading ? (
                       <div className="text-center animate-pulse text-amber-500 text-lg md:text-2xl font-bold uppercase mt-20">
                           Contacting AI Oracle...
@@ -505,16 +504,16 @@ export default function App() {
       )}
 
       {/* --- TOP BAR --- */}
-      <header className="h-14 md:h-20 shrink-0 border-b-2 md:border-b-4 border-amber-500 bg-amber-950/20 px-3 md:px-6 flex justify-between items-center z-20">
+      <header className="h-10 md:h-20 shrink-0 border-b-2 md:border-b-4 border-amber-500 bg-amber-950/20 px-2 md:px-6 flex justify-between items-center z-20">
         <div className="flex items-center gap-2 md:gap-6">
-            <Terminal size={20} className="md:w-8 md:h-8 text-amber-500" />
+            <Terminal size={16} className="md:w-8 md:h-8 text-amber-500" />
             <div className="flex flex-col">
-                <h1 className="text-xl md:text-4xl font-black uppercase tracking-[0.2em] leading-none text-shadow-amber">RL DOJO</h1>
+                <h1 className="text-base md:text-4xl font-black uppercase tracking-[0.2em] leading-none text-shadow-amber">RL DOJO</h1>
             </div>
         </div>
         <div className="flex items-center gap-4 md:gap-6">
-             <button onClick={handleDeleteAll} className="flex items-center gap-1 md:gap-2 text-red-500 hover:text-red-400 uppercase font-bold text-xs md:text-sm">
-                <Trash2 size={16} className="md:w-5 md:h-5"/> Reset System
+             <button onClick={handleDeleteAll} className="flex items-center gap-1 md:gap-2 text-red-500 hover:text-red-400 uppercase font-bold text-[10px] md:text-sm border border-red-900 px-2 py-1 md:border-none">
+                <Trash2 size={12} className="md:w-5 md:h-5"/> Reset System
              </button>
         </div>
       </header>
@@ -523,16 +522,16 @@ export default function App() {
       <div className="flex-1 flex overflow-hidden">
         
         {/* LEFT RAIL: FIGHTER LOGS - Smaller on Mobile */}
-        <div className="w-16 md:w-80 shrink-0 border-r-2 md:border-r-4 border-amber-500/50 flex flex-col bg-black/50 backdrop-blur-sm">
-            <div className="p-2 md:p-4 border-b-2 md:border-b-4 border-amber-500/30">
+        <div className="w-12 md:w-80 shrink-0 border-r-2 md:border-r-4 border-amber-500/50 flex flex-col bg-black/50 backdrop-blur-sm">
+            <div className="p-1 md:p-4 border-b-2 md:border-b-4 border-amber-500/30 flex flex-col items-center md:items-stretch">
                 <h2 className="hidden md:flex text-2xl font-black uppercase tracking-widest items-center gap-2 mb-4">
                    <User size={24}/> Fighter Logs
                 </h2>
-                <RetroButton variant="ghost" className="w-full py-1 md:py-2 text-xs md:text-lg px-0" onClick={() => setShowWizard(true)}>
-                    <Plus size={20} /> <span className="hidden md:inline">New Fighter</span>
+                <RetroButton variant="ghost" className="w-full py-1 md:py-2 text-[10px] md:text-lg px-0 md:px-4" onClick={() => setShowWizard(true)}>
+                    <Plus size={16} className="md:w-6 md:h-6" /> <span className="hidden md:inline">New Fighter</span>
                 </RetroButton>
                 {runs.length > 1 && (
-                    <button onClick={() => setShowCompare(true)} className="w-full mt-2 text-xs md:text-sm uppercase font-bold text-amber-700 hover:text-amber-500 flex items-center justify-center gap-2 py-2 border border-amber-900 hover:border-amber-500">
+                    <button onClick={() => setShowCompare(true)} className="w-full mt-2 text-[10px] md:text-sm uppercase font-bold text-amber-700 hover:text-amber-500 flex items-center justify-center gap-2 py-2 border border-amber-900 hover:border-amber-500">
                         <BarChart2 size={16}/> <span className="hidden md:inline">Compare</span>
                     </button>
                 )}
@@ -568,251 +567,185 @@ export default function App() {
         </div>
 
         {/* CENTER STAGE */}
-        <div className="flex-1 flex flex-col relative bg-amber-950/5 min-w-0">
+        <div className="flex-1 flex flex-col md:flex-row relative bg-amber-950/5 min-w-0">
             {selectedRun ? (
                 <>
-                    {/* Header: Run Info + Training Config */}
-                    <div className="h-auto shrink-0 border-b-2 md:border-b-4 border-amber-500/30 bg-black/40 flex flex-col">
-                        {/* Top Line: Name and Status */}
-                        <div className="h-10 md:h-16 px-3 md:px-6 flex items-center justify-between border-b border-amber-900/30">
-                            <div className="flex flex-col">
-                                <span className="hidden md:inline text-sm uppercase opacity-50 font-bold">Current Fighter</span>
-                                <h2 className="text-base md:text-3xl font-black uppercase text-white tracking-wide">{selectedRun.name}</h2>
-                            </div>
-                            <div className="flex gap-4 items-center">
-                                <div className={`px-2 md:px-4 py-1 border-2 text-xs md:text-xl font-bold uppercase ${selectedRun.status === RunStatus.RUNNING ? 'border-amber-500 text-amber-500 animate-pulse' : selectedRun.status === RunStatus.COMPLETED ? 'border-green-500 text-green-500' : 'border-amber-900 text-amber-700'}`}>
+                    {/* LEFT (on Desktop) / TOP (on Mobile): CONTROLS & STATUS */}
+                    <div className="w-full md:w-1/3 flex flex-col shrink-0 border-b-2 md:border-b-0 md:border-r-4 border-amber-500/30 max-h-[40vh] md:max-h-full overflow-y-auto md:overflow-hidden">
+                        
+                        {/* Header Info */}
+                        <div className="px-2 md:px-6 py-2 md:py-4 border-b border-amber-900/30 bg-black/40">
+                             <div className="flex items-center justify-between">
+                                <h2 className="text-sm md:text-3xl font-black uppercase text-white tracking-wide truncate">{selectedRun.name}</h2>
+                                <div className={`px-2 py-0.5 border text-[10px] md:text-base font-bold uppercase ${selectedRun.status === RunStatus.RUNNING ? 'border-amber-500 text-amber-500 animate-pulse' : selectedRun.status === RunStatus.COMPLETED ? 'border-green-500 text-green-500' : 'border-amber-900 text-amber-700'}`}>
                                     {selectedRun.status === RunStatus.QUEUED ? "READY" : selectedRun.status === RunStatus.RUNNING ? "TRAINING" : "COMPLETE"}
                                 </div>
-                            </div>
+                             </div>
                         </div>
 
-                        {/* Training Controls Bar (Only editable when Queued) */}
-                        <div className="px-3 md:px-6 py-3 md:py-10 bg-amber-950/30 flex flex-wrap items-center gap-3 md:gap-12 text-xs md:text-lg">
+                        {/* Training Controls (Compact on Mobile) */}
+                        <div className="px-2 md:px-6 py-4 md:py-10 bg-amber-950/30 flex flex-wrap gap-3 md:gap-8 text-xs md:text-lg border-b border-amber-900/50">
+                             <div className="group relative flex items-center gap-1 md:gap-2 w-full">
+                                  <span className="font-bold text-amber-600 uppercase w-16 md:w-auto flex items-center gap-1 cursor-help">Algorithm <HelpCircle size={10} className="md:w-4 md:h-4"/>:</span>
+                                  <div className="hidden group-hover:block absolute left-0 bottom-full mb-2 w-64 p-2 bg-black border border-amber-500 text-[10px] md:text-sm text-amber-500 z-50 shadow-lg">
+                                      <div className="font-bold border-b border-amber-900 mb-1">DQN (Deep Q-Network)</div>
+                                      <div className="mb-2 opacity-80">Learns by estimating value of actions. Good for simple tasks.</div>
+                                      <div className="font-bold border-b border-amber-900 mb-1">PPO (Proximal Policy Opt)</div>
+                                      <div className="opacity-80">Updates policy gradually. More stable for complex tasks.</div>
+                                  </div>
+                                  <select 
+                                      disabled={selectedRun.status !== RunStatus.QUEUED}
+                                      value={selectedAlgo}
+                                      onChange={(e) => setSelectedAlgo(e.target.value as Algorithm)}
+                                      className="bg-black border border-amber-900 text-amber-500 p-1 uppercase focus:outline-none flex-1"
+                                  >
+                                      <option value={Algorithm.DQN}>DQN (Fast)</option>
+                                      <option value={Algorithm.PPO}>PPO (Stable)</option>
+                                  </select>
+                             </div>
+
+                             <div className="flex items-center gap-1 md:gap-2 w-full">
+                                <span className="font-bold text-amber-600 uppercase w-16 md:w-auto">Time:</span>
+                                <select 
+                                    disabled={selectedRun.status !== RunStatus.QUEUED}
+                                    value={trainingPreset}
+                                    onChange={(e) => {
+                                        const val = e.target.value as TrainingPreset;
+                                        setTrainingPreset(val);
+                                        if (val === TrainingPreset.QUICK) setCustomEpisodes(50);
+                                        if (val === TrainingPreset.STANDARD) setCustomEpisodes(200);
+                                        if (val === TrainingPreset.DEEP) setCustomEpisodes(1000);
+                                    }}
+                                    className="bg-black border border-amber-900 text-amber-500 p-1 uppercase focus:outline-none flex-1"
+                                >
+                                    <option value={TrainingPreset.QUICK}>Quick (50)</option>
+                                    <option value={TrainingPreset.STANDARD}>Std (200)</option>
+                                    <option value={TrainingPreset.DEEP}>Deep (1000)</option>
+                                    <option value={TrainingPreset.CUSTOM}>Custom</option>
+                                </select>
+                             </div>
+                             
+                             {trainingPreset === TrainingPreset.CUSTOM && (
+                                <div className="flex items-center gap-1 md:gap-2 w-full">
+                                    <span className="font-bold text-amber-600 uppercase w-16 md:w-auto">Eps:</span>
+                                    <input 
+                                        type="number"
+                                        value={customEpisodes}
+                                        onChange={(e) => setCustomEpisodes(parseInt(e.target.value))}
+                                        className="bg-black border border-amber-900 text-amber-500 p-1 w-20"
+                                    />
+                                </div>
+                             )}
+
+                             <div className="group relative flex items-center gap-1 md:gap-2 w-full">
+                                <span className="font-bold text-amber-600 uppercase w-16 md:w-auto flex items-center gap-1 cursor-help">Seed <HelpCircle size={10} className="md:w-4 md:h-4"/>:</span>
+                                <div className="hidden group-hover:block absolute left-0 bottom-full mb-2 w-48 p-2 bg-black border border-amber-500 text-[10px] md:text-sm text-amber-500 z-50 shadow-lg">
+                                      Determines the random starting conditions. Using the same seed ensures reproducibility.
+                                </div>
+                                <span className="text-amber-500 font-mono">123</span>
+                             </div>
+                        </div>
+
+                        {/* Status Log & Action */}
+                        <div className="flex-1 p-2 md:p-6 flex flex-col gap-2 md:gap-4 min-h-0 bg-amber-950/10">
+                            <h3 className="text-xs md:text-xl font-black uppercase border-b-2 border-amber-500 pb-1 flex items-center gap-2"><Activity size={14} className="md:w-6 md:h-6"/> Status Log</h3>
                             
-                            {/* Algorithm Selector */}
-                            <div className="flex flex-col gap-1 md:gap-2 relative group w-1/2 md:w-auto">
-                                <div className="flex items-center gap-2 w-full md:w-auto">
-                                  <span className="font-bold text-amber-600 uppercase w-auto">Algorithm:</span>
-                                  <div className="flex items-center bg-black border border-amber-900 flex-1 md:flex-none">
-                                      <select 
-                                          disabled={selectedRun.status !== RunStatus.QUEUED}
-                                          value={selectedAlgo}
-                                          onChange={(e) => setSelectedAlgo(e.target.value as Algorithm)}
-                                          className="bg-transparent text-amber-500 font-bold p-1 md:p-2 uppercase focus:outline-none disabled:opacity-50 text-xs md:text-xl w-full"
-                                      >
-                                          <option value={Algorithm.DQN}>DQN (Fast)</option>
-                                          <option value={Algorithm.PPO}>PPO (Stable)</option>
-                                      </select>
-                                  </div>
-                                  <div className="text-amber-600 cursor-help hidden md:block">
-                                      <HelpCircle size={24}/>
-                                  </div>
-                                </div>
-                                {/* Expanded Tooltip */}
-                                <div className="absolute top-full left-0 mt-4 w-[280px] md:w-[400px] bg-black border-4 border-amber-500 p-4 md:p-6 z-50 hidden group-hover:block shadow-[0_0_30px_rgba(245,158,11,0.3)] animate-in fade-in slide-in-from-top-2">
-                                    <div className="mb-6">
-                                        <div className="font-bold text-xl md:text-2xl mb-2 text-amber-400 border-b border-amber-800 pb-1">DQN (Deep Q-Network)</div>
-                                        <div className="text-sm md:text-base opacity-90 leading-relaxed text-amber-100">Learns by estimating value of actions. Good for simple tasks.</div>
-                                    </div>
-                                    <div>
-                                        <div className="font-bold text-xl md:text-2xl mb-2 text-amber-400 border-b border-amber-800 pb-1">PPO (Proximal Policy Opt)</div>
-                                        <div className="text-sm md:text-base opacity-90 leading-relaxed text-amber-100">Updates policy gradually. More stable for complex tasks.</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Duration Presets */}
-                            <div className="flex items-center gap-2 w-5/12 md:w-auto" title="Select pre-configured training length">
-                                <span className="font-bold text-amber-600 uppercase w-auto">Time:</span>
-                                <div className="flex items-center bg-black border border-amber-900 flex-1 md:flex-none">
-                                    <select 
-                                        disabled={selectedRun.status !== RunStatus.QUEUED}
-                                        value={trainingPreset}
-                                        onChange={(e) => {
-                                            const val = e.target.value as TrainingPreset;
-                                            setTrainingPreset(val);
-                                            if (val === TrainingPreset.QUICK) setCustomEpisodes(50);
-                                            if (val === TrainingPreset.STANDARD) setCustomEpisodes(200);
-                                            if (val === TrainingPreset.DEEP) setCustomEpisodes(1000);
-                                        }}
-                                        className="bg-transparent text-amber-500 font-bold p-1 md:p-2 uppercase focus:outline-none disabled:opacity-50 text-xs md:text-xl w-full"
-                                    >
-                                        <option value={TrainingPreset.QUICK}>Quick Demo (50)</option>
-                                        <option value={TrainingPreset.STANDARD}>Standard (200)</option>
-                                        <option value={TrainingPreset.DEEP}>Deep (1000)</option>
-                                        <option value={TrainingPreset.CUSTOM}>Custom</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            {/* Episodes Count */}
-                            <div className="flex items-center gap-2 w-1/2 md:w-auto" title="Total number of episodes to train">
-                                <span className="font-bold text-amber-600 uppercase w-auto">Episodes:</span>
-                                <input 
-                                    type="number"
-                                    disabled={selectedRun.status !== RunStatus.QUEUED || trainingPreset !== TrainingPreset.CUSTOM}
-                                    value={trainingPreset !== TrainingPreset.CUSTOM ? (trainingPreset === TrainingPreset.QUICK ? 50 : trainingPreset === TrainingPreset.STANDARD ? 200 : 1000) : customEpisodes}
-                                    onChange={(e) => setCustomEpisodes(parseInt(e.target.value))}
-                                    className="bg-black border border-amber-900 w-20 md:w-28 text-center font-bold text-amber-500 p-1 md:p-2 focus:outline-none focus:border-amber-500 disabled:opacity-50 text-xs md:text-xl"
-                                />
-                            </div>
-
-                            {/* Seed with Tooltip */}
-                            <div className="flex items-center gap-2 relative group w-5/12 md:w-auto">
-                                <span className="font-bold text-amber-600 uppercase w-auto">Seed:</span>
-                                <span className="font-mono text-amber-500 text-xs md:text-xl border-b border-dotted border-amber-900 cursor-help">{selectedRun.config.seed || 123}</span>
-                                
-                                {/* Seed Tooltip */}
-                                <div className="absolute top-full left-0 mt-4 w-[280px] md:w-[300px] bg-black border-4 border-amber-500 p-4 z-50 hidden group-hover:block shadow-[0_0_30px_rgba(245,158,11,0.3)] animate-in fade-in slide-in-from-top-2">
-                                    <div className="font-bold text-xl mb-2 text-amber-400">Random Seed</div>
-                                    <div className="text-base opacity-90 leading-relaxed text-amber-100">
-                                        A number that initializes the random number generator. Using the same seed ensures the same sequence of random events (like enemy moves), making experiments reproducible.
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    {/* Main Content Area */}
-                    <div className="flex-1 p-2 md:p-6 overflow-hidden relative flex flex-col md:flex-row gap-4 md:gap-6">
-                        
-                        {/* LEFT: STATUS STORY & CONTROLS */}
-                        <div className="w-full md:w-1/3 flex flex-col gap-4 max-h-[40vh] md:max-h-full shrink-0">
-                             {/* Narrative Box */}
-                             <RetroContainer className="flex-1 p-3 md:p-6 bg-amber-950/10 border-amber-500 min-h-0">
-                                 <h3 className="text-base md:text-xl font-black uppercase mb-2 md:mb-4 border-b-2 border-amber-500 pb-2 flex items-center gap-2"><Activity size={20}/> Status Log</h3>
-                                 <div className="text-sm md:text-lg space-y-3 md:space-y-4 font-mono leading-relaxed overflow-y-auto pr-2 custom-scrollbar">
-                                     {selectedRun.status === RunStatus.QUEUED && (
-                                         <p className="text-amber-200">
-                                             This fighter is initialized and waiting for data. It doesn't know how to fight yet. <br/>
-                                             Review the settings above, then click <span className="font-bold text-amber-500">INITIALIZE TRAINING</span> below to start.
+                            <div className="flex-1 overflow-y-auto custom-scrollbar text-xs md:text-base leading-relaxed font-mono opacity-90 pr-1">
+                                 {selectedRun.status === RunStatus.QUEUED && (
+                                     <p className="text-amber-200">
+                                         Fighter initialized. Waiting for protocol start.
+                                     </p>
+                                 )}
+                                 {selectedRun.status === RunStatus.RUNNING && (
+                                     <div>
+                                         <p className="text-amber-200 mb-2 animate-pulse">
+                                             Training... {selectedRun.current_episode}/{selectedRun.total_episodes} Episodes.
                                          </p>
-                                     )}
-                                     {selectedRun.status === RunStatus.RUNNING && (
-                                         <div>
-                                             <p className="text-amber-200 mb-4 animate-pulse">
-                                                 Training in progress... The {selectedRun.config.algo} agent is playing {selectedRun.total_episodes} practice matches against the {selectedRun.ui_config?.friendly_difficulty || "Standard"} bot.
-                                             </p>
-                                             <div className="w-full bg-amber-900/50 h-6 md:h-8 border-2 border-amber-500 mb-2">
-                                                 <div 
-                                                    className="h-full bg-amber-500 transition-all duration-1000" 
-                                                    style={{ width: `${(selectedRun.current_episode / selectedRun.total_episodes) * 100}%`}}
-                                                 ></div>
-                                             </div>
-                                             <div className="text-right font-bold text-amber-500">
-                                                 {(selectedRun.current_episode / selectedRun.total_episodes * 100).toFixed(0)}% COMPLETE
-                                             </div>
+                                         <div className="w-full bg-amber-900/50 h-2 md:h-6 border border-amber-500 mb-1">
+                                             <div 
+                                                className="h-full bg-amber-500 transition-all duration-1000" 
+                                                style={{ width: `${(selectedRun.current_episode / selectedRun.total_episodes) * 100}%`}}
+                                             ></div>
                                          </div>
-                                     )}
-                                     {selectedRun.status === RunStatus.COMPLETED && (
-                                         <div className="space-y-2 md:space-y-4">
-                                             <p className="text-green-400 text-xl md:text-3xl font-bold mb-1 md:mb-2">Training Finished!</p>
-                                             <p className="text-amber-200 text-base md:text-xl">
-                                                 Your fighter has completed its training. Check the chart on the right to see if it improved.
-                                             </p>
-
-                                             {/* Summary Metrics */}
-                                             <div className="bg-amber-900/20 border-2 border-amber-900 p-2 md:p-3 grid grid-cols-2 gap-2 md:gap-4 text-sm md:text-lg">
-                                                 <div>
-                                                     <span className="block text-xs md:text-sm opacity-50 uppercase">Time Elapsed</span>
-                                                     <span className="font-bold">{elapsedTime}</span>
-                                                 </div>
-                                                 <div>
-                                                     <span className="block text-xs md:text-sm opacity-50 uppercase">Episodes</span>
-                                                     <span className="font-bold">{selectedRun.total_episodes}</span>
-                                                 </div>
-                                                 <div>
-                                                     <span className="block text-xs md:text-sm opacity-50 uppercase">Best Reward</span>
-                                                     <span className="font-bold text-amber-400">{selectedRun.best_mean_reward.toFixed(1)}</span>
-                                                 </div>
-                                                 <div>
-                                                     <span className="block text-xs md:text-sm opacity-50 uppercase">Win Rate</span>
-                                                     <span className="font-bold text-amber-400">{Math.round((selectedRun.best_mean_reward + 10) / 20 * 100)}%</span>
-                                                 </div>
-                                             </div>
-                                             
-                                             <div className="pt-2">
-                                                 <p className="text-xs md:text-sm text-amber-300 italic mb-2 text-center">
-                                                     Want a deeper insight? Click below for an AI-generated breakdown.
-                                                 </p>
-                                                 <button 
-                                                    onClick={handleAnalyze}
-                                                    className="w-full border-2 md:border-4 border-amber-500 bg-amber-950/30 text-amber-500 hover:bg-amber-500 hover:text-black py-2 md:py-4 font-bold uppercase flex items-center justify-center gap-3 transition-all text-base md:text-xl"
-                                                 >
-                                                    <BarChart2 size={24}/> VIEW AI ANALYSIS REPORT
-                                                 </button>
-                                             </div>
-
-                                             <p className="text-amber-200 pt-2 text-center text-sm md:text-base">
-                                                 Ready to see it in action? <br/>Click <span className="font-bold text-amber-500">WATCH DEMO FIGHT</span> below.
-                                             </p>
+                                     </div>
+                                 )}
+                                 {selectedRun.status === RunStatus.COMPLETED && (
+                                     <div className="space-y-2">
+                                         <p className="text-green-400 font-bold">Training Finished!</p>
+                                         <p className="text-amber-200/80">Your fighter has completed its training. Check the chart on the right to see if it improved.</p>
+                                         <div className="grid grid-cols-2 gap-2 text-[10px] md:text-sm bg-black/30 p-2 border border-amber-900">
+                                             <div><span className="opacity-50 block">TIME</span> {elapsedTime}</div>
+                                             <div><span className="opacity-50 block">WIN RATE</span> <span className="text-amber-300">{Math.round((selectedRun.best_mean_reward + 10) / 20 * 100)}%</span></div>
                                          </div>
-                                     )}
-                                 </div>
-                             </RetroContainer>
+                                         <div className="text-[10px] md:text-sm text-amber-500/60 pt-2 border-t border-amber-900/30">
+                                             View detailed session report:
+                                         </div>
+                                         <button 
+                                            onClick={handleAnalyze}
+                                            className="w-full border border-amber-500 bg-amber-950/30 text-amber-500 hover:bg-amber-500 hover:text-black py-2 font-bold uppercase text-xs md:text-sm flex items-center justify-center gap-2"
+                                         >
+                                            <BarChart2 size={14}/> View AI Analysis Report
+                                         </button>
+                                     </div>
+                                 )}
+                            </div>
 
-                             {/* Action Box */}
-                             <div className="h-16 md:h-24 shrink-0">
+                            {/* Main Action Button */}
+                            <div className="h-10 md:h-20 shrink-0 mt-auto">
                                 {selectedRun.status === RunStatus.QUEUED && (
-                                     <RetroButton onClick={handleRunAction} variant="success" className="w-full h-full text-lg md:text-2xl">
-                                        START TRAINING <Zap size={24}/>
+                                     <RetroButton onClick={handleRunAction} variant="success" className="w-full h-full text-sm md:text-2xl">
+                                        START TRAINING <Zap size={16} className="md:w-6 md:h-6"/>
                                      </RetroButton>
                                 )}
                                 {selectedRun.status === RunStatus.RUNNING && (
-                                     <RetroButton onClick={handleRunAction} variant="danger" className="w-full h-full text-lg md:text-2xl">
-                                        STOP TRAINING <Square size={24}/>
+                                     <RetroButton onClick={handleRunAction} variant="danger" className="w-full h-full text-sm md:text-2xl">
+                                        STOP <Square size={16} className="md:w-6 md:h-6"/>
                                      </RetroButton>
                                 )}
                                 {selectedRun.status === RunStatus.COMPLETED && (
-                                     <RetroButton onClick={() => handleSimulate(OpponentType.RANDOM)} variant="primary" className="w-full h-full text-lg md:text-2xl animate-pulse-fast">
-                                        WATCH DEMO FIGHT <Play size={24}/>
+                                     <RetroButton onClick={() => handleSimulate(OpponentType.RANDOM)} variant="primary" className="w-full h-full text-sm md:text-2xl animate-pulse-fast">
+                                        WATCH DEMO <Play size={16} className="md:w-6 md:h-6"/>
                                      </RetroButton>
                                 )}
                              </div>
                         </div>
+                    </div>
 
-                        {/* RIGHT: METRICS OR VIEWER */}
-                        <div className="flex-1 flex flex-col min-w-0 min-h-0">
-                            {activeView === 'VISUALS' ? (
-                                <RetroContainer className="h-full border-2 md:border-4 border-amber-500 bg-black min-h-0 flex-1">
-                                    <div className="absolute top-0 right-0 z-50">
-                                        <button onClick={() => setActiveView('TELEMETRY')} className="bg-black border-l-2 border-b-2 border-amber-500 p-2 hover:bg-amber-500 hover:text-black">
-                                            <X/>
-                                        </button>
+                    {/* RIGHT (Desktop) / BOTTOM (Mobile): METRICS OR VIEWER */}
+                    <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-black md:bg-transparent">
+                        {activeView === 'VISUALS' ? (
+                            <RetroContainer className="h-full border-t-2 md:border-4 border-amber-500 bg-black min-h-0 flex-1">
+                                <ArenaViewer 
+                                    trajectory={activeTrajectory} 
+                                    loading={simLoading} 
+                                    currentOpponentType={simOpponent}
+                                    onRestart={() => handleSimulate(simOpponent)}
+                                    onChangeOpponent={(type) => handleSimulate(type)}
+                                    onShowAnalysis={handleAnalyze}
+                                    onClose={() => setActiveView('TELEMETRY')}
+                                />
+                            </RetroContainer>
+                        ) : (
+                            <RetroContainer className="h-full p-2 md:p-6 bg-black min-h-0 flex-1 flex flex-col border-t-2 md:border-none border-amber-900">
+                                {selectedRun.status === RunStatus.QUEUED ? (
+                                    <div className="h-full flex flex-col items-center justify-center opacity-30 text-center gap-2 md:gap-4">
+                                        <BarChart2 size={40} className="md:w-20 md:h-20"/>
+                                        <div className="text-sm md:text-2xl uppercase font-bold">No Data Yet</div>
+                                        <p className="text-xs md:text-xl">Charts will appear here once training starts.</p>
                                     </div>
-                                    <ArenaViewer 
-                                        trajectory={activeTrajectory} 
-                                        loading={simLoading} 
-                                        currentOpponentType={simOpponent}
-                                        onRestart={() => handleSimulate(simOpponent)}
-                                        onChangeOpponent={(type) => handleSimulate(type)}
-                                        onShowAnalysis={handleAnalyze}
-                                    />
-                                </RetroContainer>
-                            ) : (
-                                <RetroContainer className="h-full p-2 md:p-6 bg-black min-h-0 flex-1 flex flex-col">
-                                    {selectedRun.status === RunStatus.QUEUED ? (
-                                        <div className="h-full flex flex-col items-center justify-center opacity-30 text-center gap-4">
-                                            <BarChart2 size={60} className="md:w-20 md:h-20"/>
-                                            <div className="text-lg md:text-2xl uppercase font-bold">No Data Yet</div>
-                                            <p className="text-base md:text-xl">Charts will appear here once training starts.</p>
-                                        </div>
-                                    ) : (
-                                        <div className="flex-1 min-h-0 flex flex-col relative">
-                                            <MetricsChart data={metrics} />
-                                        </div>
-                                    )}
-                                </RetroContainer>
-                            )}
-                        </div>
-
+                                ) : (
+                                    <div className="flex-1 min-h-0 flex flex-col relative">
+                                        <MetricsChart data={metrics} />
+                                    </div>
+                                )}
+                            </RetroContainer>
+                        )}
                     </div>
                 </>
             ) : (
-                 <div className="h-full flex flex-col items-center justify-center opacity-20">
-                    <Terminal size={80} className="md:w-[120px] md:h-[120px]"/>
-                    <div className="text-2xl md:text-5xl mt-4 md:mt-8 font-black uppercase text-center">Create a Fighter</div>
+                 <div className="h-full flex flex-col items-center justify-center opacity-20 p-4 text-center">
+                    <Terminal size={60} className="md:w-[120px] md:h-[120px]"/>
+                    <div className="text-xl md:text-5xl mt-4 md:mt-8 font-black uppercase">Create a Fighter</div>
                 </div>
             )}
         </div>
