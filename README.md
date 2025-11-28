@@ -7,16 +7,19 @@ The application gamifies machine learning education, making complex processes li
 # Screenshots
 
 <div align="center">
-<img width="831" height="654" alt="image" src="https://github.com/user-attachments/assets/079dba7b-4620-497a-bd42-1540a454447e" />
+  <img width="600" alt="image" src="https://github.com/user-attachments/assets/079dba7b-4620-497a-bd42-1540a454447e" />
 </div>
+
 <div align="center">
-<img width="1273" height="1251" alt="image" src="https://github.com/user-attachments/assets/599a31ab-d67e-4e8c-b3df-bb7905040276" />
+  <img width="600" alt="image" src="https://github.com/user-attachments/assets/599a31ab-d67e-4e8c-b3df-bb7905040276" />
 </div>
+
 <div align="center">
-<img width="1274" height="1249" alt="image" src="https://github.com/user-attachments/assets/ea879c37-073f-4285-872b-ff55f4ac6eeb" />
+  <img width="600" alt="image" src="https://github.com/user-attachments/assets/ea879c37-073f-4285-872b-ff55f4ac6eeb" />
 </div>
+
 <div align="center">
-<img width="939" height="1150" alt="image" src="https://github.com/user-attachments/assets/6991b4e5-930a-4282-813b-1fef5f52fc5d" />
+  <img width="600" alt="image" src="https://github.com/user-attachments/assets/6991b4e5-930a-4282-813b-1fef5f52fc5d" />
 </div>
 
 # How It Works
