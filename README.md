@@ -1,17 +1,32 @@
-# RLdojo: Neural Nexus
+# RLdojo
 
-**RLdojo** is a retro-futuristic frontend interface designed to democratize and visualize Reinforcement Learning (RL). It provides a "Terminal" style environment where users—from beginners to engineers—can train AI agents to fight in a 2D combat simulation.
+**RLdojo** is a retro-futuristic frontend interface designed to democratize and visualize Reinforcement Learning (RL). 
+It provides an educational "Terminal" style environment where users—from beginners to engineers—can train AI agents to fight in a 2D combat simulation.
+The application gamifies machine learning education, making complex processes like generic algorithms, hyperparameters, and reward functions accessible through visual feedback and AI-driven analysis.
 
-The application gamifies the machine learning process, making complex concepts like generic algorithms, hyperparameters, and reward functions accessible through visual feedback and AI-driven analysis.
+# Screenshots
 
-## 🚀 How It Works
+<div align="center">
+<img width="831" height="654" alt="image" src="https://github.com/user-attachments/assets/079dba7b-4620-497a-bd42-1540a454447e" />
+</div>
+<div align="center">
+<img width="1273" height="1251" alt="image" src="https://github.com/user-attachments/assets/599a31ab-d67e-4e8c-b3df-bb7905040276" />
+</div>
+<div align="center">
+<img width="1274" height="1249" alt="image" src="https://github.com/user-attachments/assets/ea879c37-073f-4285-872b-ff55f4ac6eeb" />
+</div>
+<div align="center">
+<img width="939" height="1150" alt="image" src="https://github.com/user-attachments/assets/6991b4e5-930a-4282-813b-1fef5f52fc5d" />
+</div>
+
+# How It Works
 
 1.  **Create a Fighter:** Use the **Wizard** to set up a beginner-friendly agent or access the **Console** directly for granular control.
 2.  **Train:** Configure your training run (Algorithm: DQN/PPO, Duration: Quick/Deep) and watch real-time telemetry charts (Win Rate, Reward) as the agent learns.
 3.  **Visualize:** Switch to the **Arena Viewer** to watch your agent fight in a 2D "StickFight" simulation. See exactly how it behaves against Random, Aggressive, or Defensive opponents.
 4.  **Analyze:** Use the **AI Analysis** feature (powered by Google Gemini) to generate a "Sensei Report" that explains your agent's strategy, strengths, and weaknesses in plain English.
 
-## 🛠️ Setup & Installation
+##  Setup & Installation
 
 1.  **Clone the repository**
     ```bash
@@ -36,7 +51,7 @@ The application gamifies the machine learning process, making complex concepts l
     ```
     Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-## ⚡ Tech Stack
+##  Tech Stack
 
 *   **Frontend Framework:** React 18 (Vite)
 *   **Styling:** Tailwind CSS (Custom Retro/CRT Theme)
