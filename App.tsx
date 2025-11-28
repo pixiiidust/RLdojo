@@ -229,47 +229,49 @@ const CompareModal: React.FC<{ runs: Run[], onClose: () => void }> = ({ runs, on
     
     return (
         <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-2 md:p-8 backdrop-blur-sm">
-            <RetroContainer className="w-full max-w-5xl p-4 md:p-8 h-full md:h-[80vh]">
-                 <div className="flex justify-between items-center mb-4 md:mb-8 border-b-4 border-amber-500 pb-2 md:pb-4 shrink-0">
+            <RetroContainer className="w-full max-w-5xl h-full md:h-[80vh] flex flex-col">
+                 <div className="flex justify-between items-center p-4 md:p-8 border-b-2 md:border-b-4 border-amber-500 bg-black sticky top-0 z-10 shrink-0">
                     <h2 className="text-lg md:text-4xl font-black uppercase flex items-center gap-3">
-                        <BarChart2 size={24} className="md:w-10 md:h-10" /> FIGHTER COMPARISON
+                        <BarChart2 size={24} className="md:w-10 md:h-10" /> <span className="truncate">FIGHTER COMPARISON</span>
                     </h2>
-                    <button onClick={onClose} className="hover:text-white"><X size={24} className="md:w-8 md:h-8"/></button>
+                    <button onClick={onClose} className="hover:text-white shrink-0"><X size={24} className="md:w-8 md:h-8"/></button>
                 </div>
                 
-                {completedRuns.length < 2 ? (
-                     <div className="flex flex-col items-center justify-center h-full gap-4 opacity-50">
-                        <AlertTriangle size={48} className="md:w-16 md:h-16"/>
-                        <div className="text-sm md:text-2xl text-center">Need at least 2 completed fighters to compare.</div>
-                     </div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 h-full overflow-y-auto pb-20">
-                         {completedRuns.map(run => (
-                             <div key={run.run_id} className="border-2 md:border-4 border-amber-900/50 p-4 md:p-6 bg-amber-950/10 flex flex-col gap-2 md:gap-4">
-                                 <div className="text-lg md:text-3xl font-black uppercase text-amber-500">{run.name}</div>
-                                 <div className="grid grid-cols-2 gap-4 text-sm md:text-xl">
-                                     <div>
-                                         <span className="block text-xs md:text-sm opacity-50">DIFFICULTY</span>
-                                         <span className="font-bold">{run.ui_config?.friendly_difficulty || "CUSTOM"}</span>
+                <div className="flex-1 overflow-y-auto p-4 md:p-8 min-h-0">
+                    {completedRuns.length < 2 ? (
+                         <div className="flex flex-col items-center justify-center h-full gap-4 opacity-50">
+                            <AlertTriangle size={48} className="md:w-16 md:h-16"/>
+                            <div className="text-sm md:text-2xl text-center">Need at least 2 completed fighters to compare.</div>
+                         </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 pb-4">
+                             {completedRuns.map(run => (
+                                 <div key={run.run_id} className="border-2 md:border-4 border-amber-900/50 p-4 md:p-6 bg-amber-950/10 flex flex-col gap-2 md:gap-4">
+                                     <div className="text-base md:text-3xl font-black uppercase text-amber-500 truncate">{run.name}</div>
+                                     <div className="grid grid-cols-2 gap-4 text-xs md:text-xl">
+                                         <div>
+                                             <span className="block text-[10px] md:text-sm opacity-50">DIFFICULTY</span>
+                                             <span className="font-bold">{run.ui_config?.friendly_difficulty || "CUSTOM"}</span>
+                                         </div>
+                                         <div>
+                                             <span className="block text-[10px] md:text-sm opacity-50">ALGORITHM</span>
+                                             <span className="font-bold">{run.config.algo}</span>
+                                         </div>
                                      </div>
-                                     <div>
-                                         <span className="block text-xs md:text-sm opacity-50">ALGORITHM</span>
-                                         <span className="font-bold">{run.config.algo}</span>
+                                     <div className="mt-2 md:mt-4 pt-2 md:pt-4 border-t border-amber-900">
+                                         <div className="flex justify-between items-end mb-2">
+                                             <span className="font-bold text-xs md:text-base">WIN RATE</span>
+                                             <span className="text-sm md:text-4xl font-black">{Math.round((run.best_mean_reward + 10) / 20 * 100)}%</span>
+                                         </div>
+                                         <div className="w-full bg-amber-900 h-3 md:h-6">
+                                             <div className="bg-amber-500 h-full" style={{ width: `${Math.round((run.best_mean_reward + 10) / 20 * 100)}%` }}></div>
+                                         </div>
                                      </div>
                                  </div>
-                                 <div className="mt-2 md:mt-4 pt-2 md:pt-4 border-t border-amber-900">
-                                     <div className="flex justify-between items-end mb-2">
-                                         <span className="font-bold text-sm md:text-base">WIN RATE</span>
-                                         <span className="text-lg md:text-4xl font-black">{Math.round((run.best_mean_reward + 10) / 20 * 100)}%</span>
-                                     </div>
-                                     <div className="w-full bg-amber-900 h-4 md:h-6">
-                                         <div className="bg-amber-500 h-full" style={{ width: `${Math.round((run.best_mean_reward + 10) / 20 * 100)}%` }}></div>
-                                     </div>
-                                 </div>
-                             </div>
-                         ))}
-                    </div>
-                )}
+                             ))}
+                        </div>
+                    )}
+                </div>
             </RetroContainer>
         </div>
     );
@@ -504,14 +506,14 @@ export default function App() {
       )}
 
       {/* --- TOP BAR --- */}
-      <header className="h-10 md:h-20 shrink-0 border-b-2 md:border-b-4 border-amber-500 bg-amber-950/20 px-2 md:px-6 flex justify-between items-center z-20">
-        <div className="flex items-center gap-2 md:gap-6">
-            <Terminal size={16} className="md:w-8 md:h-8 text-amber-500" />
-            <div className="flex flex-col">
-                <h1 className="text-base md:text-4xl font-black uppercase tracking-[0.2em] leading-none text-shadow-amber">RL DOJO</h1>
+      <header className="h-12 md:h-20 shrink-0 border-b-2 md:border-b-4 border-amber-500 bg-amber-950/20 px-2 md:px-6 flex justify-between items-center z-20 min-w-0">
+        <div className="flex items-center gap-2 md:gap-6 min-w-0">
+            <Terminal size={16} className="md:w-8 md:h-8 text-amber-500 shrink-0" />
+            <div className="flex flex-col min-w-0">
+                <h1 className="text-base md:text-4xl font-black uppercase tracking-[0.2em] leading-none text-shadow-amber truncate">RL DOJO</h1>
             </div>
         </div>
-        <div className="flex items-center gap-4 md:gap-6">
+        <div className="flex items-center gap-4 md:gap-6 shrink-0">
              <button onClick={handleDeleteAll} className="flex items-center gap-1 md:gap-2 text-red-500 hover:text-red-400 uppercase font-bold text-[10px] md:text-sm border border-red-900 px-2 py-1 md:border-none">
                 <Trash2 size={12} className="md:w-5 md:h-5"/> Reset System
              </button>
@@ -519,15 +521,15 @@ export default function App() {
       </header>
 
       {/* --- MAIN WORKSPACE --- */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden min-h-0">
         
         {/* LEFT RAIL: FIGHTER LOGS - Smaller on Mobile */}
-        <div className="w-12 md:w-80 shrink-0 border-r-2 md:border-r-4 border-amber-500/50 flex flex-col bg-black/50 backdrop-blur-sm">
-            <div className="p-1 md:p-4 border-b-2 md:border-b-4 border-amber-500/30 flex flex-col items-center md:items-stretch">
+        <div className="w-14 md:w-80 shrink-0 border-r-2 md:border-r-4 border-amber-500/50 flex flex-col bg-black/50 backdrop-blur-sm min-h-0">
+            <div className="p-1 md:p-4 border-b-2 md:border-b-4 border-amber-500/30 flex flex-col items-center md:items-stretch shrink-0">
                 <h2 className="hidden md:flex text-2xl font-black uppercase tracking-widest items-center gap-2 mb-4">
                    <User size={24}/> Fighter Logs
                 </h2>
-                <RetroButton variant="ghost" className="w-full py-1 md:py-2 text-[10px] md:text-lg px-0 md:px-4" onClick={() => setShowWizard(true)}>
+                <RetroButton variant="ghost" className="w-full py-2 md:py-2 text-[10px] md:text-lg px-0 md:px-4" onClick={() => setShowWizard(true)}>
                     <Plus size={16} className="md:w-6 md:h-6" /> <span className="hidden md:inline">New Fighter</span>
                 </RetroButton>
                 {runs.length > 1 && (
@@ -537,7 +539,7 @@ export default function App() {
                 )}
             </div>
             
-            <div className="flex-1 overflow-y-auto custom-scrollbar p-1 md:p-2 space-y-1 md:space-y-2">
+            <div className="flex-1 overflow-y-auto custom-scrollbar p-1 md:p-2 space-y-1 md:space-y-2 min-h-0">
                 {runs.length === 0 && (
                     <div className="text-center p-4 opacity-50 italic text-sm md:text-lg">
                         <span className="hidden md:inline">No fighters yet. Start training!</span>
@@ -567,14 +569,14 @@ export default function App() {
         </div>
 
         {/* CENTER STAGE */}
-        <div className="flex-1 flex flex-col md:flex-row relative bg-amber-950/5 min-w-0">
+        <div className="flex-1 flex flex-col md:flex-row relative bg-amber-950/5 min-w-0 min-h-0">
             {selectedRun ? (
                 <>
                     {/* LEFT (on Desktop) / TOP (on Mobile): CONTROLS & STATUS */}
-                    <div className="w-full md:w-1/3 flex flex-col shrink-0 border-b-2 md:border-b-0 md:border-r-4 border-amber-500/30 max-h-[40vh] md:max-h-full overflow-y-auto md:overflow-hidden">
+                    <div className="w-full md:w-1/3 flex flex-col shrink-0 border-b-2 md:border-b-0 md:border-r-4 border-amber-500/30 max-h-[40vh] md:max-h-full min-h-0">
                         
                         {/* Header Info */}
-                        <div className="px-2 md:px-6 py-2 md:py-4 border-b border-amber-900/30 bg-black/40">
+                        <div className="px-2 md:px-6 py-2 md:py-4 border-b border-amber-900/30 bg-black/40 shrink-0">
                              <div className="flex items-center justify-between">
                                 <h2 className="text-sm md:text-3xl font-black uppercase text-white tracking-wide truncate">{selectedRun.name}</h2>
                                 <div className={`px-2 py-0.5 border text-[10px] md:text-base font-bold uppercase ${selectedRun.status === RunStatus.RUNNING ? 'border-amber-500 text-amber-500 animate-pulse' : selectedRun.status === RunStatus.COMPLETED ? 'border-green-500 text-green-500' : 'border-amber-900 text-amber-700'}`}>
@@ -584,7 +586,7 @@ export default function App() {
                         </div>
 
                         {/* Training Controls (Compact on Mobile) */}
-                        <div className="px-2 md:px-6 py-4 md:py-10 bg-amber-950/30 flex flex-wrap gap-3 md:gap-8 text-xs md:text-lg border-b border-amber-900/50">
+                        <div className="px-2 md:px-6 py-4 md:py-10 bg-amber-950/30 flex flex-wrap gap-3 md:gap-8 text-xs md:text-lg border-b border-amber-900/50 overflow-y-auto shrink-0">
                              <div className="group relative flex items-center gap-1 md:gap-2 w-full">
                                   <span className="font-bold text-amber-600 uppercase w-16 md:w-auto flex items-center gap-1 cursor-help">Algorithm <HelpCircle size={10} className="md:w-4 md:h-4"/>:</span>
                                   <div className="hidden group-hover:block absolute left-0 bottom-full mb-2 w-64 p-2 bg-black border border-amber-500 text-[10px] md:text-sm text-amber-500 z-50 shadow-lg">
@@ -647,7 +649,7 @@ export default function App() {
                         </div>
 
                         {/* Status Log & Action */}
-                        <div className="flex-1 p-2 md:p-6 flex flex-col gap-2 md:gap-4 min-h-0 bg-amber-950/10">
+                        <div className="flex-1 p-2 md:p-6 flex flex-col gap-2 md:gap-4 min-h-0 bg-amber-950/10 overflow-y-auto">
                             <h3 className="text-xs md:text-xl font-black uppercase border-b-2 border-amber-500 pb-1 flex items-center gap-2"><Activity size={14} className="md:w-6 md:h-6"/> Status Log</h3>
                             
                             <div className="flex-1 overflow-y-auto custom-scrollbar text-xs md:text-base leading-relaxed font-mono opacity-90 pr-1">
