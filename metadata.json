@@ -1,0 +1,5 @@
+{
+  "name": "RLdojo",
+  "description": "A frontend interface for managing and visualizing Reinforcement Learning experiments for the StickFight environment.",
+  "requestFramePermissions": []
+}

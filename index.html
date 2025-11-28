@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RLdojo // TERMINAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['VT323', 'monospace'],
+              mono: ['VT323', 'monospace'],
+            },
+            colors: {
+              amber: {
+                50: '#fffbeb',
+                100: '#fef3c7',
+                200: '#fde68a',
+                300: '#fcd34d',
+                400: '#fbbf24',
+                500: '#ffb000', /* Primary Retro Color */
+                600: '#d97706',
+                700: '#b45309',
+                800: '#92400e',
+                900: '#78350f',
+                950: '#0f0a00', /* Deep Background */
+              }
+            },
+            animation: {
+              'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'flicker': 'flicker 0.15s infinite',
+              'spin-slow': 'spin 3s linear infinite',
+            },
+            keyframes: {
+              flicker: {
+                '0%': { opacity: '0.98' },
+                '50%': { opacity: '1' },
+                '100%': { opacity: '0.99' },
+              }
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      body {
+        background-color: #050300;
+        color: #ffb000;
+        font-family: 'VT323', monospace;
+        font-size: 22px; /* Increased base size for better readability */
+        overflow: hidden;
+      }
+      
+      /* Subtle CRT Effects */
+      .scanlines {
+        background: linear-gradient(
+          to bottom,
+          rgba(255,255,255,0),
+          rgba(255,255,255,0) 50%,
+          rgba(0,0,0,0.2) 50%,
+          rgba(0,0,0,0.2)
+        );
+        background-size: 100% 6px; 
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        pointer-events: none;
+        z-index: 9999;
+        opacity: 0.6;
+      }
+      
+      .crt-glow {
+        text-shadow: 0 0 3px rgba(255, 176, 0, 0.5);
+      }
+      
+      /* Custom Scrollbar - Blocky and Large */
+      ::-webkit-scrollbar {
+        width: 20px;
+        height: 20px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0f0a00; 
+        border-left: 2px solid #553300;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #ffb000; 
+        border: 4px solid #0f0a00;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #eebb00; 
+      }
+      
+      ::selection {
+        background: #ffb000;
+        color: #000;
+      }
+
+      /* Utilities */
+      .retro-border {
+        border: 4px solid #ffb000;
+        box-shadow: 0 0 15px rgba(255, 176, 0, 0.15), inset 0 0 30px rgba(255, 176, 0, 0.05);
+      }
+      
+      .text-shadow-amber {
+         text-shadow: 4px 4px 0px rgba(180, 83, 9, 0.5);
+      }
+      
+      /* Increase tooltip and smaller text visibility */
+      .text-xs { font-size: 0.85rem !important; }
+      .text-sm { font-size: 1.1rem !important; }
+      .text-base { font-size: 1.25rem !important; }
+      .text-lg { font-size: 1.5rem !important; }
+      .text-xl { font-size: 1.75rem !important; }
+      .text-2xl { font-size: 2rem !important; }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "recharts": "https://aistudiocdn.com/recharts@^3.5.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div class="scanlines"></div>
+    <div id="root" class="h-screen w-screen flex flex-col crt-glow"></div>
+  </body>
+</html>

@@ -1,0 +1,353 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { Play, Pause, RefreshCw, Swords, Brain, ChevronDown, Activity, BarChart, MonitorPlay } from 'lucide-react';
+import { EpisodeTrajectory, Action, OpponentType } from '../types';
+
+interface ArenaViewerProps {
+  trajectory: EpisodeTrajectory | null;
+  loading: boolean;
+  onRestart?: () => void;
+  onChangeOpponent?: (type: OpponentType) => void;
+  onShowAnalysis?: () => void;
+  currentOpponentType?: OpponentType;
+}
+
+const ARENA_TILES = 11;
+
+// --- Helper Components ---
+const CommentaryLine: React.FC<{ text: string, type: 'info' | 'critical' }> = ({ text, type }) => (
+    <div className={`text-2xl font-mono ${type === 'critical' ? 'text-amber-300 font-black' : 'text-amber-500'} animate-in fade-in slide-in-from-bottom-2 leading-tight`}>
+        {text}
+    </div>
+);
+
+const MenuDropdown: React.FC<{ 
+    label: string, 
+    icon: React.ReactNode, 
+    options: { id: string, label: string, desc: string }[], 
+    onSelect: (id: string) => void 
+}> = ({ label, icon, options, onSelect }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+        <div className="relative w-full">
+            <button 
+                onClick={() => setIsOpen(!isOpen)}
+                className="w-full bg-black border-4 border-amber-500 hover:bg-amber-500 hover:text-black py-4 px-4 font-bold uppercase flex items-center justify-between gap-4 transition-all text-xl"
+            >
+                <div className="flex items-center gap-3">{icon} {label}</div>
+                <ChevronDown size={24} className={`transition-transform ${isOpen ? 'rotate-180' : ''}`}/>
+            </button>
+            
+            {isOpen && (
+                <div className="absolute bottom-full left-0 w-full mb-2 bg-black border-4 border-amber-500 z-50 shadow-[0_0_20px_rgba(255,176,0,0.2)] max-h-60 overflow-y-auto">
+                    {options.map(opt => (
+                        <button 
+                            key={opt.id}
+                            onClick={() => { onSelect(opt.id); setIsOpen(false); }}
+                            className="w-full text-left p-4 hover:bg-amber-900/30 border-b border-amber-900 last:border-0 group"
+                        >
+                            <div className="font-bold text-amber-500 uppercase text-lg group-hover:text-amber-400">{opt.label}</div>
+                            <div className="text-sm text-amber-500/60 group-hover:text-amber-500/80">{opt.desc}</div>
+                        </button>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
+
+export const ArenaViewer: React.FC<ArenaViewerProps> = ({ trajectory, loading, onRestart, onChangeOpponent, onShowAnalysis, currentOpponentType = OpponentType.RANDOM }) => {
+  const [stepIndex, setStepIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [playbackSpeed, setPlaybackSpeed] = useState(150);
+  const timerRef = useRef<number | null>(null);
+  const [commentary, setCommentary] = useState<{text: string, type: 'info'|'critical'}|null>(null);
+
+  useEffect(() => {
+    if (isPlaying && trajectory && trajectory.steps.length > 0) {
+      timerRef.current = window.setInterval(() => {
+        setStepIndex(prev => {
+          if (prev >= trajectory.steps.length - 1) {
+            setIsPlaying(false);
+            return prev;
+          }
+          return prev + 1;
+        });
+      }, playbackSpeed);
+    } else if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [isPlaying, trajectory, playbackSpeed]);
+
+  useEffect(() => {
+    setStepIndex(0);
+    setCommentary(null);
+    setIsPlaying(true);
+  }, [trajectory]);
+
+  // Generate commentary based on step events
+  useEffect(() => {
+    if (!trajectory || !trajectory.steps[stepIndex]) return;
+    const step = trajectory.steps[stepIndex];
+    const prev = stepIndex > 0 ? trajectory.steps[stepIndex - 1] : null;
+
+    let newComment = null;
+
+    if (stepIndex === 0) {
+        newComment = { text: "FIGHT START! Fighters engage.", type: 'info' };
+    } else if (prev) {
+        const selfDmg = prev.self_hp - step.self_hp;
+        const oppDmg = prev.opp_hp - step.opp_hp;
+        const dist = Math.abs(step.self_pos - step.opp_pos);
+
+        if (oppDmg > 10) newComment = { text: "CRITICAL HIT! Agent lands a devastating blow.", type: 'critical' };
+        else if (selfDmg > 10) newComment = { text: "WARNING! Agent takes heavy damage.", type: 'critical' };
+        else if (oppDmg > 0) newComment = { text: `Agent connects a strike! Opponent HP now ${Math.round(step.opp_hp)}.`, type: 'info' };
+        else if (selfDmg > 0) newComment = { text: `Opponent strikes back! Agent HP down to ${Math.round(step.self_hp)}.`, type: 'info' };
+        else if (step.self_action === Action.BLOCK && prev.opp_action === Action.PUNCH) newComment = { text: "Clutch block by the Agent!", type: 'info' };
+        else if (step.self_action === Action.BLOCK) newComment = { text: "Agent maintains defensive stance.", type: 'info' };
+        else if (dist === 1 && stepIndex % 5 === 0) newComment = { text: "Fighters are nose-to-nose in close combat.", type: 'info' };
+    }
+
+    if (newComment) setCommentary(newComment as any);
+
+  }, [stepIndex, trajectory]);
+
+  // Loading State
+  if (loading) return (
+    <div className="h-full w-full flex flex-col items-center justify-center gap-6 text-amber-500 animate-pulse bg-black">
+       <div className="text-6xl font-black tracking-widest">CONNECTING TO ARENA...</div>
+       <div className="w-64 h-4 border-2 border-amber-500 p-1">
+           <div className="h-full bg-amber-500 animate-[width_1s_ease-in-out_infinite] w-full origin-left"></div>
+       </div>
+    </div>
+  );
+  
+  // Empty State
+  if (!trajectory) return (
+    <div className="h-full w-full flex flex-col items-center justify-center text-amber-500/30 gap-4 bg-black">
+      <div className="w-32 h-32 border-4 border-dashed border-amber-500/30 rounded-full flex items-center justify-center animate-[spin_10s_linear_infinite]">
+         <div className="w-24 h-24 border-2 border-amber-500/30 rounded-full"></div>
+      </div>
+      <span className="uppercase tracking-widest font-bold text-2xl">Ready for Simulation</span>
+    </div>
+  );
+
+  // Guard against undefined steps (Bug fix)
+  const currentStep = trajectory.steps[stepIndex];
+  if (!currentStep) return null;
+
+  const isFinished = stepIndex === trajectory.steps.length - 1;
+
+  return (
+    <div className="h-full flex flex-col relative bg-black text-amber-500 select-none">
+      
+      {/* Top Border Info Strip */}
+      <div className="h-10 border-b-2 border-amber-500 bg-amber-950/20 flex justify-between items-center px-4 font-bold text-lg uppercase tracking-wider shrink-0">
+         <div className="flex gap-6">
+             <div className="flex gap-2"><span className="opacity-50">EP:</span><span>{trajectory.episode_id.substring(0,6)}</span></div>
+             <div className="flex gap-2"><span className="opacity-50">STEP:</span><span>{currentStep.t}</span></div>
+         </div>
+         <div className="flex gap-4 items-center">
+             <div className="text-xs opacity-50">BRAIN: LATEST</div>
+             <div className="flex gap-2">
+                 <span>SCORE:</span>
+                 <span className={currentStep.reward > 0 ? "text-amber-300" : "text-amber-700"}>
+                     {currentStep.reward}
+                 </span>
+             </div>
+         </div>
+      </div>
+
+      {/* COMPACT ARENA AREA - Reduced height significantly */}
+      <div className="flex-none h-[280px] relative bg-[#080500] border-b-4 border-amber-900 overflow-hidden">
+        
+        {/* Grid Floor */}
+        <div className="absolute bottom-0 w-full h-1/4 flex border-t-2 border-amber-900/50">
+           {Array.from({ length: ARENA_TILES }).map((_, i) => (
+             <div key={i} className="flex-1 border-r border-amber-900/30 flex items-end justify-center pb-1">
+                 <span className="text-xs font-bold opacity-20">{i}</span>
+             </div>
+           ))}
+        </div>
+
+        {/* Characters Container */}
+        <div className="absolute inset-0 flex items-end pb-8">
+            
+            {/* Agent (YOU) - Bright Amber/Greenish */}
+            <div 
+              className="absolute transition-all duration-150 ease-linear z-10 w-[8%] flex flex-col items-center gap-2"
+              style={{ left: `${(currentStep.self_pos / ARENA_TILES) * 100}%` }}
+            >
+                 {/* HP Label (Above Bar) */}
+                 <span className="text-lg font-black tracking-wider text-amber-400 whitespace-nowrap mb-0 drop-shadow-md bg-black/50 px-1">
+                    AGENT HP {Math.round(currentStep.self_hp)}/100
+                 </span>
+                 {/* Thicker HP Bar (2x) */}
+                 <div className="w-[200%] h-8 bg-black border-4 border-amber-600 mb-1">
+                     <div className="bg-amber-500 h-full transition-all" style={{ width: `${currentStep.self_hp}%` }}></div>
+                 </div>
+                 
+                 {/* Body (Taller ~45%, Thicker Outline) */}
+                 <div className={`w-16 h-48 border-[6px] border-amber-200 bg-amber-500 relative flex items-center justify-center shadow-[0_0_30px_rgba(245,158,11,0.6)] ${currentStep.self_action === Action.BLOCK ? 'border-b-[12px] scale-y-90' : ''}`}>
+                     {/* Face */}
+                     <div className="w-full flex justify-center gap-2 mt-4 absolute top-0">
+                        <div className="w-2 h-2 bg-black"></div><div className="w-2 h-2 bg-black"></div>
+                     </div>
+                     {/* Action Indicator */}
+                     {(currentStep.self_action === Action.PUNCH || currentStep.self_action === Action.KICK) && (
+                         <div className="absolute left-full ml-2 bg-white text-black text-xl font-black px-3 py-1 uppercase animate-ping z-50">POW</div>
+                     )}
+                 </div>
+            </div>
+
+            {/* Opponent (ENEMY) - Red/Magenta */}
+            <div 
+              className="absolute transition-all duration-150 ease-linear z-10 w-[8%] flex flex-col items-center gap-2"
+              style={{ left: `${(currentStep.opp_pos / ARENA_TILES) * 100}%` }}
+            >
+                 {/* HP Label (Above Bar) */}
+                 <span className="text-lg font-black tracking-wider text-red-500 whitespace-nowrap mb-0 drop-shadow-md bg-black/50 px-1">
+                    OPPONENT HP {Math.round(currentStep.opp_hp)}/100
+                 </span>
+                 {/* Thicker HP Bar (2x) */}
+                 <div className="w-[200%] h-8 bg-black border-4 border-red-800 mb-1">
+                     <div className="bg-red-600 h-full transition-all" style={{ width: `${currentStep.opp_hp}%` }}></div>
+                 </div>
+
+                 {/* Body (Taller ~45%, Thicker Outline) */}
+                 <div className={`w-16 h-48 border-[6px] border-red-200 bg-red-600 relative flex items-center justify-center shadow-[0_0_30px_rgba(220,38,38,0.6)] ${currentStep.opp_action === Action.BLOCK ? 'border-b-[12px] scale-y-90' : ''}`}>
+                     {/* Face */}
+                     <div className="w-full flex justify-center gap-2 mt-4 absolute top-0">
+                        <div className="w-2 h-2 bg-black"></div><div className="w-2 h-2 bg-black"></div>
+                     </div>
+                     {/* Action Indicator */}
+                     {(currentStep.opp_action === Action.PUNCH || currentStep.opp_action === Action.KICK) && (
+                         <div className="absolute right-full mr-2 bg-white text-black text-xl font-black px-3 py-1 uppercase animate-ping z-50">BAM</div>
+                     )}
+                 </div>
+            </div>
+        </div>
+      </div>
+
+      {/* LIVE COMMENTARY MODULE */}
+      <div className="flex-none h-32 bg-black border-b border-amber-900 p-6 flex flex-col justify-center shrink-0">
+          <div className="text-md font-black uppercase tracking-widest text-amber-700 mb-2 flex items-center gap-2">
+            <Activity size={20} className="animate-pulse" /> LIVE COMMENTARY
+          </div>
+          <div className="h-full flex items-center">
+            {commentary ? (
+                <CommentaryLine text={commentary.text} type={commentary.type} />
+            ) : (
+                <span className="opacity-30 italic text-2xl">...waiting for signal...</span>
+            )}
+          </div>
+      </div>
+
+      {/* Timeline & Controls */}
+      <div className="flex-1 flex flex-col p-6 bg-amber-950/5 relative min-h-0">
+          
+          {/* Scrubber */}
+          <div className="flex items-center gap-6 mb-4">
+             <button onClick={() => setIsPlaying(!isPlaying)} className="hover:text-white hover:bg-amber-500/20 p-2 rounded-full transition-all">
+                 {isPlaying ? <Pause size={32} /> : <Play size={32} />}
+             </button>
+             <input 
+                type="range" 
+                min={0} 
+                max={trajectory.steps.length - 1} 
+                value={stepIndex}
+                onChange={(e) => { setIsPlaying(false); setStepIndex(parseInt(e.target.value)); }}
+                className="flex-1 accent-amber-500 h-4 bg-amber-900 rounded-none appearance-none cursor-pointer"
+            />
+          </div>
+
+          {/* NEW END OF EPISODE PANEL (ASCII BOX STYLE) */}
+          {isFinished && (
+              <div className="absolute inset-0 bg-black/90 z-20 flex flex-col items-center justify-center p-8 backdrop-blur-sm animate-in fade-in">
+                  <div className="w-full max-w-3xl border-[6px] border-amber-500 bg-black p-1 shadow-[0_0_50px_rgba(255,176,0,0.15)]">
+                      
+                      {/* ASCII Header */}
+                      <div className="bg-amber-500 text-black p-6 text-center mb-8 border-b-4 border-black">
+                           <h2 className="text-4xl font-black uppercase tracking-tighter">
+                               EPISODE COMPLETE: {trajectory.won ? "AGENT WIN" : "AGENT DEFEAT"}
+                           </h2>
+                      </div>
+                      
+                      <div className="px-8 pb-8 grid grid-cols-2 gap-8">
+                           
+                           {/* Watch Again */}
+                           <div className="col-span-2">
+                               <button 
+                                 onClick={() => { setStepIndex(0); setIsPlaying(true); }} 
+                                 className="w-full border-4 border-amber-500 hover:bg-amber-500 hover:text-black py-4 px-6 font-bold uppercase flex items-center justify-center gap-4 transition-all group text-xl"
+                               >
+                                  <RefreshCw size={28} className="group-hover:rotate-180 transition-transform"/> Watch Replay
+                               </button>
+                               <div className="text-center mt-2 text-sm text-amber-500/60">Replays this fight from the start.</div>
+                           </div>
+
+                           {/* Choose Opponent Dropdown */}
+                           {onChangeOpponent && (
+                               <div>
+                                   <MenuDropdown 
+                                        label="Choose Opponent"
+                                        icon={<Swords size={24}/>}
+                                        onSelect={(id) => onChangeOpponent(id as OpponentType)}
+                                        options={[
+                                            { id: OpponentType.AGGRESSIVE, label: "Aggressive Bot", desc: "Rushes in and attacks often." },
+                                            { id: OpponentType.DEFENSIVE, label: "Defensive Bot", desc: "Blocks more and waits." },
+                                            { id: OpponentType.RANDOM, label: "Random Bot", desc: "Picks moves at random." },
+                                            { id: OpponentType.MIRROR, label: "Mirror Match", desc: "Uses the same model as you." }
+                                        ]}
+                                   />
+                                   <div className="text-center mt-2 text-sm text-amber-500/60 font-bold border-t border-amber-900/50 pt-1">
+                                       Opponent: {currentOpponentType.toUpperCase()}
+                                   </div>
+                               </div>
+                           )}
+
+                           {/* Choose Brain Dropdown */}
+                           <div>
+                               <MenuDropdown 
+                                    label="Choose Brain"
+                                    icon={<Brain size={24}/>}
+                                    onSelect={(id) => console.log("Switch brain to", id)}
+                                    options={[
+                                        { id: 'latest', label: "Latest Model", desc: "This run's current state." },
+                                        { id: 'best', label: "Best Model", desc: "Highest win rate (82%)." },
+                                        { id: 'saved1', label: "SF-Run-041 Best", desc: "Saved from previous run." }
+                                    ]}
+                               />
+                               <div className="text-center mt-2 text-sm text-amber-500/60 border-t border-amber-900/50 pt-1">
+                                    Agent Brain: LATEST
+                               </div>
+                           </div>
+
+                           {/* AI Analysis */}
+                           {onShowAnalysis && (
+                               <div className="col-span-2 pt-6 border-t-2 border-amber-900 mt-2">
+                                   <div className="flex justify-between items-center bg-amber-900/20 p-2 border border-amber-900/50 mb-2">
+                                       <span className="font-bold text-amber-500">ANALYSIS:</span>
+                                   </div>
+                                   <button 
+                                     onClick={onShowAnalysis}
+                                     className="w-full border-4 border-dashed border-amber-500/50 hover:border-amber-500 hover:bg-amber-900/20 py-4 px-4 font-bold uppercase flex items-center justify-center gap-3 text-amber-500 transition-all text-lg"
+                                   >
+                                      <BarChart size={24}/> AI Analysis Report
+                                   </button>
+                                   <div className="text-center mt-2 text-sm text-amber-500/60">Get a short explanation of how your agent trained and what it learned.</div>
+                               </div>
+                           )}
+
+                      </div>
+                  </div>
+              </div>
+          )}
+      </div>
+
+    </div>
+  );
+};
