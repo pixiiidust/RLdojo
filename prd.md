@@ -1,8 +1,8 @@
 # Product Requirements Document: RLdojo (Neural Nexus)
+**Product Name:** RLdojo (Internal Code: Neural Nexus)  
+**Version:** 1.0 (Terminal Interface)
 
 ## 1. Executive Summary
-**Product Name:** RLdojo (Internal Code: Neural Nexus)  
-**Version:** 1.0 (Terminal Interface)  
 **Description:** A browser-based "Dojo" interface designed to democratize Reinforcement Learning (RL). It allows users—ranging from absolute beginners to experienced engineers—to configure, train, visualize, and analyze AI agents in a "StickFight" combat environment. The interface utilizes a retro-futuristic "Terminal" aesthetic to gamify the technical aspects of ML experimentation.
 
 ---
