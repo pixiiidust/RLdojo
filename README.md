@@ -1,9 +1,9 @@
 # RLdojo
 
-RLdojo is a retro futuristic interface designed to democratize and visualize Reinforcement Learning. 
+**RLdojo** is a retro futuristic interface designed to democratize and visualize Reinforcement Learning. 
 - It provides an educational terminal style environment where users can train AI agents to fight in a 2D combat simulation. 
 - The application gamifies machine learning education, making complex processes like generic algorithms, hyperparameters, and reward functions accessible through visual feedback and AI-driven analysis.
-The goal is to make RL feel simple, visual, and hands on.
+- The goal is to make RL feel simple, visual, and hands on.
 
 # Screenshots
 
