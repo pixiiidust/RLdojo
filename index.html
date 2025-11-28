@@ -47,11 +47,20 @@
       }
     </script>
     <style>
+      :root {
+        font-size: 14px; /* Standard Mobile Base */
+      }
+      
+      @media (min-width: 768px) {
+        :root {
+          font-size: 16px; /* Standard Desktop Base */
+        }
+      }
+
       body {
         background-color: #050300;
         color: #ffb000;
         font-family: 'VT323', monospace;
-        font-size: 22px; /* Increased base size for better readability */
         overflow: hidden;
       }
       
@@ -76,19 +85,32 @@
         text-shadow: 0 0 3px rgba(255, 176, 0, 0.5);
       }
       
-      /* Custom Scrollbar - Blocky and Large */
+      /* Custom Scrollbar */
       ::-webkit-scrollbar {
-        width: 20px;
-        height: 20px;
+        width: 8px;
+        height: 8px;
       }
+      @media (min-width: 768px) {
+        ::-webkit-scrollbar {
+          width: 12px;
+          height: 12px;
+        }
+      }
+
       ::-webkit-scrollbar-track {
         background: #0f0a00; 
         border-left: 2px solid #553300;
       }
       ::-webkit-scrollbar-thumb {
         background: #ffb000; 
-        border: 4px solid #0f0a00;
+        border: 1px solid #0f0a00;
       }
+      @media (min-width: 768px) {
+        ::-webkit-scrollbar-thumb {
+          border: 2px solid #0f0a00;
+        }
+      }
+
       ::-webkit-scrollbar-thumb:hover {
         background: #eebb00; 
       }
@@ -100,21 +122,23 @@
 
       /* Utilities */
       .retro-border {
-        border: 4px solid #ffb000;
-        box-shadow: 0 0 15px rgba(255, 176, 0, 0.15), inset 0 0 30px rgba(255, 176, 0, 0.05);
+        border: 2px solid #ffb000;
+        box-shadow: 0 0 10px rgba(255, 176, 0, 0.15), inset 0 0 20px rgba(255, 176, 0, 0.05);
+      }
+      @media (min-width: 768px) {
+        .retro-border {
+          border: 4px solid #ffb000;
+        }
       }
       
       .text-shadow-amber {
-         text-shadow: 4px 4px 0px rgba(180, 83, 9, 0.5);
+         text-shadow: 2px 2px 0px rgba(180, 83, 9, 0.5);
       }
-      
-      /* Increase tooltip and smaller text visibility */
-      .text-xs { font-size: 0.85rem !important; }
-      .text-sm { font-size: 1.1rem !important; }
-      .text-base { font-size: 1.25rem !important; }
-      .text-lg { font-size: 1.5rem !important; }
-      .text-xl { font-size: 1.75rem !important; }
-      .text-2xl { font-size: 2rem !important; }
+      @media (min-width: 768px) {
+         .text-shadow-amber {
+            text-shadow: 4px 4px 0px rgba(180, 83, 9, 0.5);
+         }
+      }
     </style>
   <script type="importmap">
 {
