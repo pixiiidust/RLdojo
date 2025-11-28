@@ -190,6 +190,10 @@ const WelcomeScreen: React.FC<{ onStartBeginner: () => void, onStartAdvanced: ()
                 You see how rewards guide behavior and how a policy takes shape, step by step.
             </p>
 
+            <p className="text-xs md:text-lg text-amber-500 mt-4 md:mt-8 font-bold animate-pulse">
+                Pro tip: The dojo renders best on desktop or tablet.
+            </p>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-12 mt-6 md:mt-16">
                 {/* Beginner Path */}
                 <button 
@@ -608,7 +612,7 @@ export default function App() {
                         <div className="px-2 md:px-6 py-4 md:py-10 bg-amber-950/30 flex flex-wrap gap-3 md:gap-8 text-xs md:text-lg border-b border-amber-900/50 overflow-y-auto shrink-0">
                              <div className="group relative flex items-center gap-1 md:gap-2 w-full">
                                   <span className="font-bold text-amber-600 uppercase w-16 md:w-auto flex items-center gap-1 cursor-help">Algorithm <HelpCircle size={10} className="md:w-4 md:h-4"/>:</span>
-                                  <div className="hidden group-hover:block absolute left-0 top-full mt-2 w-64 p-2 bg-black border border-amber-500 text-[10px] md:text-sm text-amber-500 z-50 shadow-lg">
+                                  <div className="hidden group-hover:block absolute left-0 top-full mt-1 w-64 p-2 bg-black border border-amber-500 text-[10px] md:text-sm text-amber-500 z-[100] shadow-lg">
                                       <div className="font-bold border-b border-amber-900 mb-1">DQN (Deep Q-Network)</div>
                                       <div className="mb-2 opacity-80">Learns by estimating value of actions. Good for simple tasks.</div>
                                       <div className="font-bold border-b border-amber-900 mb-1">PPO (Proximal Policy Opt)</div>
@@ -660,7 +664,7 @@ export default function App() {
 
                              <div className="group relative flex items-center gap-1 md:gap-2 w-full">
                                 <span className="font-bold text-amber-600 uppercase w-16 md:w-auto flex items-center gap-1 cursor-help">Seed <HelpCircle size={10} className="md:w-4 md:h-4"/>:</span>
-                                <div className="hidden group-hover:block absolute left-0 top-full mt-2 w-48 p-2 bg-black border border-amber-500 text-[10px] md:text-sm text-amber-500 z-50 shadow-lg">
+                                <div className="hidden group-hover:block absolute left-0 top-full mt-1 w-48 p-2 bg-black border border-amber-500 text-[10px] md:text-sm text-amber-500 z-[100] shadow-lg">
                                       Determines the random starting conditions. Using the same seed ensures reproducibility.
                                 </div>
                                 <span className="text-amber-500 font-mono">123</span>
