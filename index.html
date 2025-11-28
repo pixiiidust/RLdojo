@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>RLdojo // TERMINAL</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
@@ -49,6 +49,10 @@
     <style>
       :root {
         font-size: 14px; /* Standard Mobile Base */
+        --sat: env(safe-area-inset-top);
+        --sab: env(safe-area-inset-bottom);
+        --sal: env(safe-area-inset-left);
+        --sar: env(safe-area-inset-right);
       }
       
       @media (min-width: 768px) {
@@ -57,11 +61,23 @@
         }
       }
 
-      body {
+      html, body, #root {
         background-color: #050300;
         color: #ffb000;
         font-family: 'VT323', monospace;
+        height: 100svh; /* Use Small Viewport Height for mobile */
+        width: 100vw;
         overflow: hidden;
+        margin: 0;
+        padding: 0;
+        overscroll-behavior: none; /* Prevent bounce on mobile */
+      }
+      
+      /* Fallback for older browsers */
+      @supports not (height: 100svh) {
+        html, body, #root {
+          height: 100vh;
+        }
       }
       
       /* Subtle CRT Effects */
@@ -155,6 +171,15 @@
 </head>
   <body>
     <div class="scanlines"></div>
-    <div id="root" class="h-screen w-screen flex flex-col crt-glow"></div>
+    <div id="root" class="flex flex-col crt-glow"></div>
+    <script>
+      // Fallback for calculating VH on resize for older browsers
+      function setVh() {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      }
+      window.addEventListener('resize', setVh);
+      setVh();
+    </script>
   </body>
 </html>

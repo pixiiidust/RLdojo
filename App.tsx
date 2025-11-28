@@ -8,7 +8,7 @@ import { RetroDashboard } from './components/RetroDashboard';
 import { 
   Terminal, Play, Square, Plus, RotateCw, X, Cpu, Monitor, Activity, 
   FileText, Zap, Brain, Layers, Settings, Filter, Clock, RefreshCw, 
-  User, Shield, Swords, BarChart2, CheckCircle, AlertTriangle, ArrowRight, Trash2, BookOpen, Command, HelpCircle, ChevronDown
+  User, Shield, Swords, BarChart2, CheckCircle, AlertTriangle, ArrowRight, Trash2, BookOpen, Command, HelpCircle, ChevronDown, Maximize, Minimize
 } from 'lucide-react';
 
 // --- Helper Functions ---
@@ -287,6 +287,7 @@ export default function App() {
   const [analysisLoading, setAnalysisLoading] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<string | null>(null);
   const [simOpponent, setSimOpponent] = useState<OpponentType>(OpponentType.RANDOM);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   // New Training Settings State for currently selected run (if queued)
   const [trainingPreset, setTrainingPreset] = useState<TrainingPreset>(TrainingPreset.STANDARD);
@@ -302,6 +303,13 @@ export default function App() {
   const [elapsedTime, setElapsedTime] = useState("00:00:00");
 
   const selectedRun = runs.find(r => r.run_id === selectedRunId) || null;
+
+  // Check fullscreen state
+  useEffect(() => {
+    const handleFsChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', handleFsChange);
+    return () => document.removeEventListener('fullscreenchange', handleFsChange);
+  }, []);
 
   // Sync controls with selected run
   useEffect(() => {
@@ -472,6 +480,14 @@ export default function App() {
       }
   };
 
+  const toggleFullscreen = () => {
+      if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen();
+      } else {
+          document.exitFullscreen();
+      }
+  };
+
   if (showWelcome) return (
     <WelcomeScreen 
         onStartBeginner={startBeginnerJourney} 
@@ -480,7 +496,7 @@ export default function App() {
   );
 
   return (
-    <div className="h-screen flex flex-col bg-black text-amber-500 overflow-hidden font-mono selection:bg-amber-500 selection:text-black">
+    <div className="h-full w-full flex flex-col bg-black text-amber-500 overflow-hidden font-mono selection:bg-amber-500 selection:text-black">
       {showWizard && <Wizard onComplete={handleCreateRun} onCancel={() => setShowWizard(false)} />}
       {showCompare && <CompareModal runs={runs} onClose={() => setShowCompare(false)} />}
       
@@ -506,7 +522,7 @@ export default function App() {
       )}
 
       {/* --- TOP BAR --- */}
-      <header className="h-12 md:h-20 shrink-0 border-b-2 md:border-b-4 border-amber-500 bg-amber-950/20 px-2 md:px-6 flex justify-between items-center z-20 min-w-0">
+      <header className="h-12 md:h-20 shrink-0 border-b-2 md:border-b-4 border-amber-500 bg-amber-950/20 px-2 md:px-6 flex justify-between items-center z-20 min-w-0 pt-[env(safe-area-inset-top)]">
         <div className="flex items-center gap-2 md:gap-6 min-w-0">
             <Terminal size={16} className="md:w-8 md:h-8 text-amber-500 shrink-0" />
             <div className="flex flex-col min-w-0">
@@ -514,6 +530,9 @@ export default function App() {
             </div>
         </div>
         <div className="flex items-center gap-4 md:gap-6 shrink-0">
+             <button onClick={toggleFullscreen} className="text-amber-500 hover:text-white transition-colors" title="Toggle Fullscreen">
+                 {isFullscreen ? <Minimize size={16} className="md:w-6 md:h-6"/> : <Maximize size={16} className="md:w-6 md:h-6"/>}
+             </button>
              <button onClick={handleDeleteAll} className="flex items-center gap-1 md:gap-2 text-red-500 hover:text-red-400 uppercase font-bold text-[10px] md:text-sm border border-red-900 px-2 py-1 md:border-none">
                 <Trash2 size={12} className="md:w-5 md:h-5"/> Reset System
              </button>
@@ -521,10 +540,10 @@ export default function App() {
       </header>
 
       {/* --- MAIN WORKSPACE --- */}
-      <div className="flex-1 flex overflow-hidden min-h-0">
+      <div className="flex-1 flex overflow-hidden min-h-0 pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)] pb-[env(safe-area-inset-bottom)]">
         
-        {/* LEFT RAIL: FIGHTER LOGS - Smaller on Mobile */}
-        <div className="w-14 md:w-80 shrink-0 border-r-2 md:border-r-4 border-amber-500/50 flex flex-col bg-black/50 backdrop-blur-sm min-h-0">
+        {/* LEFT RAIL: FIGHTER LOGS - Smaller on Mobile/Tablet */}
+        <div className="w-14 md:w-56 lg:w-80 shrink-0 border-r-2 md:border-r-4 border-amber-500/50 flex flex-col bg-black/50 backdrop-blur-sm min-h-0">
             <div className="p-1 md:p-4 border-b-2 md:border-b-4 border-amber-500/30 flex flex-col items-center md:items-stretch shrink-0">
                 <h2 className="hidden md:flex text-2xl font-black uppercase tracking-widest items-center gap-2 mb-4">
                    <User size={24}/> Fighter Logs
@@ -573,7 +592,7 @@ export default function App() {
             {selectedRun ? (
                 <>
                     {/* LEFT (on Desktop) / TOP (on Mobile): CONTROLS & STATUS */}
-                    <div className="w-full md:w-1/3 flex flex-col shrink-0 border-b-2 md:border-b-0 md:border-r-4 border-amber-500/30 max-h-[40vh] md:max-h-full min-h-0">
+                    <div className="w-full md:w-72 lg:w-[400px] xl:w-1/3 flex flex-col shrink-0 border-b-2 md:border-b-0 md:border-r-4 border-amber-500/30 max-h-[40vh] md:max-h-full min-h-0">
                         
                         {/* Header Info */}
                         <div className="px-2 md:px-6 py-2 md:py-4 border-b border-amber-900/30 bg-black/40 shrink-0">
